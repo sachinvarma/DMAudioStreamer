@@ -69,7 +69,7 @@
             android:indeterminateDuration="1500" />
 
         <ImageView
-            android:id="@+id/player_previous"
+            android:id="@+id/player_next"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="8dp"
@@ -100,7 +100,7 @@
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/player_next"
+            android:id="@+id/player_previous"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="8dp"
