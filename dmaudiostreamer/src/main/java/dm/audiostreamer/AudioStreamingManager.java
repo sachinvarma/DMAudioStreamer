@@ -339,6 +339,12 @@ public class AudioStreamingManager extends StreamingManager {
 		}
 	}
 
+	public void updateList(final List<MediaMetaData> list) {
+		if (list != null && list.size() > 0) {
+			mediaList.addAll(list);
+		}
+	}
+
 	private void updateProgress() {
 		if (instance.mLastPlaybackState == 0 || instance.mLastPlaybackState < 0) {
 			return;
