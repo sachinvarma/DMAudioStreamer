@@ -152,7 +152,7 @@ public class AudioStreamingManager extends StreamingManager {
 				currentSessionCallback.playNext(nextIndex, metaData);
 			}
 		} else {
-			index = -1;
+			index = 0;
 			onSkipToNext();
 		}
 	}
