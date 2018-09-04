@@ -152,7 +152,7 @@ public class AudioStreamingManager extends StreamingManager {
 				currentSessionCallback.playNext(nextIndex, metaData);
 			}
 		} else {
-			index = 0;
+			index = -1;
 			onSkipToNext();
 		}
 	}
@@ -250,7 +250,7 @@ public class AudioStreamingManager extends StreamingManager {
 				if (instance.currentSessionCallback != null) {
 					instance.currentSessionCallback.playSongComplete();
 				}
-				instance.onSkipToNext();
+				instance.onSkipToPrevious();
 			} else {
 				instance.handleStopRequest(null);
 			}
