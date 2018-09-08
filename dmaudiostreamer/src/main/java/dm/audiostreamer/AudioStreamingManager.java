@@ -345,6 +345,14 @@ public class AudioStreamingManager extends StreamingManager {
 		}
 	}
 
+	public void removeDataFromList(final int positionToRemove) {
+		if (mediaList != null && mediaList.size() > 0) {
+			if (mediaList.size() - 1 >= positionToRemove) {
+				mediaList.remove(positionToRemove);
+			}
+		}
+	}
+
 	private void updateProgress() {
 		if (instance.mLastPlaybackState == 0 || instance.mLastPlaybackState < 0) {
 			return;
