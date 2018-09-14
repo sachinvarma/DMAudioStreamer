@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffc0c0c0"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <ProgressBar
             android:id="@+id/player_progress_bar"

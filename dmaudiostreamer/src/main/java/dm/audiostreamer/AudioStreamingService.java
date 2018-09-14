@@ -5,13 +5,13 @@
  */
 package dm.audiostreamer;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
@@ -24,9 +24,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+import java.io.IOException;
+import java.net.URL;
 
 public class AudioStreamingService extends Service implements NotificationManager.NotificationCenterDelegate {
     private static final String TAG = Logger.makeLogTag(AudioStreamingService.class);
@@ -179,6 +179,12 @@ public class AudioStreamingService extends Service implements NotificationManage
                 ImageLoader imageLoader = ImageLoader.getInstance();
                 albumArt = imageLoader.loadImageSync(audioInfo.getMediaArt());
             } catch (Exception e) {
+                try {
+                    URL url = new URL(audioInfo.getMediaArt());
+                     albumArt = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch(IOException ee) {
+                    System.out.println(ee);
+                }
                 e.printStackTrace();
             }
 
