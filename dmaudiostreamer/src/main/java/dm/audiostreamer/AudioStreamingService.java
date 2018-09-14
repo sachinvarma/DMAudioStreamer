@@ -25,6 +25,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -195,13 +196,11 @@ public class AudioStreamingService extends Service
 
 			Bitmap albumArt = null;
 			try {
-				//ImageLoader imageLoader = ImageLoader.getInstance();
-				//albumArt = imageLoader.loadImageSync(audioInfo.getMediaArt());
-				albumArt = new AsyncTaskRunner().execute(audioInfo.getMediaArt()).get();
-
+				ImageLoader imageLoader = ImageLoader.getInstance();
+				albumArt = imageLoader.loadImageSync(audioInfo.getMediaArt());
 			} catch (Exception e) {
 				try {
-					albumArt = new AsyncTaskRunner().execute("audioInfo.getMediaArt()").get();
+					albumArt = new AsyncTaskRunner().execute(audioInfo.getMediaArt()).get();
 				} catch (Exception ee) {
 					System.out.println(ee);
 				}
@@ -343,39 +342,38 @@ public class AudioStreamingService extends Service
 
 	}
 
+	class AsyncTaskRunner extends AsyncTask<String, String, Bitmap> {
 
-		class AsyncTaskRunner extends AsyncTask<String, String, Bitmap> {
+		@Override
+		protected Bitmap doInBackground(String... params) {
 
-			@Override
-			protected Bitmap doInBackground(String... params) {
-
-				try {
-					URL url = new URL(params[0]);
-					HttpURLConnection connection = null;
-					connection = (HttpURLConnection) url.openConnection();
-					connection.setDoInput(true);
-					connection.connect();
-					InputStream input = connection.getInputStream();
-					Bitmap myBitmap = BitmapFactory.decodeStream(input);
-					return myBitmap;
-				} catch (IOException e) {
-					return null;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				super.onPostExecute(result);
-				// execution of result of Long time consuming operation
-			}
-
-			@Override
-			protected void onPreExecute() {
-			}
-
-			@Override
-			protected void onProgressUpdate(String... text) {
-
+			try {
+				URL url = new URL(params[0]);
+				HttpURLConnection connection = null;
+				connection = (HttpURLConnection) url.openConnection();
+				connection.setDoInput(true);
+				connection.connect();
+				InputStream input = connection.getInputStream();
+				Bitmap myBitmap = BitmapFactory.decodeStream(input);
+				return myBitmap;
+			} catch (IOException e) {
+				return null;
 			}
 		}
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			super.onPostExecute(result);
+			// execution of result of Long time consuming operation
+		}
+
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected void onProgressUpdate(String... text) {
+
+		}
+	}
 }
