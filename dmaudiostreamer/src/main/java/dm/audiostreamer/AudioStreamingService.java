@@ -26,6 +26,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class AudioStreamingService extends Service implements NotificationManager.NotificationCenterDelegate {
@@ -180,9 +182,8 @@ public class AudioStreamingService extends Service implements NotificationManage
                 albumArt = imageLoader.loadImageSync(audioInfo.getMediaArt());
             } catch (Exception e) {
                 try {
-                    URL url = new URL(audioInfo.getMediaArt());
-                     albumArt = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch(IOException ee) {
+                     albumArt = getBitmapFromURL(audioInfo.getMediaArt());
+                } catch(Exception ee) {
                     System.out.println(ee);
                 }
                 e.printStackTrace();
@@ -308,4 +309,21 @@ public class AudioStreamingService extends Service implements NotificationManage
     public void newSongLoaded(Object... args) {
 
     }
+
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
