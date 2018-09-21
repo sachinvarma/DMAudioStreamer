@@ -192,21 +192,18 @@ public class AudioStreamingManager extends StreamingManager {
 	}
 
 	public void handlePlayRequest() {
+
 		Logger.d(TAG, "handlePlayRequest: mState=" + audioPlayback.getState());
 		if (audioPlayback != null && currentAudio != null) {
 			audioPlayback.play(currentAudio);
 			if (showPlayerNotification) {
 				if (context != null) {
-
-					Thread thread = new Thread() {
-						@Override
+					new Thread(new Runnable() {
 						public void run() {
-
 							Intent intent = new Intent(context, AudioStreamingService.class);
 							context.startService(intent);
 						}
-					};
-					thread.start();
+					}).start();
 				} else {
 					Intent intent = new Intent(context, AudioStreamingService.class);
 					context.stopService(intent);
