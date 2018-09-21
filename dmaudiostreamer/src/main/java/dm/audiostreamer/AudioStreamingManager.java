@@ -197,8 +197,16 @@ public class AudioStreamingManager extends StreamingManager {
 			audioPlayback.play(currentAudio);
 			if (showPlayerNotification) {
 				if (context != null) {
-					Intent intent = new Intent(context, AudioStreamingService.class);
-					context.startService(intent);
+
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
+
+							Intent intent = new Intent(context, AudioStreamingService.class);
+							context.startService(intent);
+						}
+					};
+					thread.start();
 				} else {
 					Intent intent = new Intent(context, AudioStreamingService.class);
 					context.stopService(intent);
