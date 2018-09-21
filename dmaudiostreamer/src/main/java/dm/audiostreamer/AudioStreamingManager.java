@@ -345,6 +345,12 @@ public class AudioStreamingManager extends StreamingManager {
 		}
 	}
 
+	public void updateListToTopPosition(final List<MediaMetaData> list) {
+		if (list != null && list.size() > 0) {
+			mediaList.addAll(0, list);
+		}
+	}
+
 	public void removeDataFromList(final int positionToRemove) {
 		if (mediaList != null && mediaList.size() > 0) {
 			if (mediaList.size() - 1 >= positionToRemove) {

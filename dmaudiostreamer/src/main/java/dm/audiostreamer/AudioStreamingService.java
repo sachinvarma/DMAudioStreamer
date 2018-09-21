@@ -175,12 +175,14 @@ public class AudioStreamingService extends Service
 				notification =
 					new NotificationCompat.Builder(getApplicationContext()).setSmallIcon(R.drawable.player)
 						.setContentIntent(pendingIntent)
+						.setPriority(2)
 						.setContentTitle(songName)
 						.build();
 			} else {
 				notification =
 					new NotificationCompat.Builder(getApplicationContext()).setSmallIcon(R.drawable.player)
 						.setContentTitle(songName)
+						.setPriority(2)
 						.build();
 			}
 
