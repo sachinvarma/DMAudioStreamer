@@ -65,35 +65,40 @@ public class AudioStreamingService extends Service
 
 	@Override
 	public void onCreate() {
-		audioStreamingManager = AudioStreamingManager.getInstance(AudioStreamingService.this);
-		audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-		NotificationManager.getInstance()
-			.addObserver(this, NotificationManager.audioProgressDidChanged);
-		NotificationManager.getInstance().addObserver(this, NotificationManager.setAnyPendingIntent);
-		NotificationManager.getInstance().addObserver(this, NotificationManager.audioPlayStateChanged);
-		try {
-			phoneStateListener = new PhoneStateListener() {
-				@Override
-				public void onCallStateChanged(int state, String incomingNumber) {
-					if (state == TelephonyManager.CALL_STATE_RINGING) {
-						if (audioStreamingManager.isPlaying()) {
-							audioStreamingManager.handlePauseRequest();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				audioStreamingManager = AudioStreamingManager.getInstance(AudioStreamingService.this);
+				audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+				NotificationManager.getInstance()
+					.addObserver(this, NotificationManager.audioProgressDidChanged);
+				NotificationManager.getInstance().addObserver(this, NotificationManager.setAnyPendingIntent);
+				NotificationManager.getInstance().addObserver(this, NotificationManager.audioPlayStateChanged);
+				try {
+					phoneStateListener = new PhoneStateListener() {
+						@Override
+						public void onCallStateChanged(int state, String incomingNumber) {
+							if (state == TelephonyManager.CALL_STATE_RINGING) {
+								if (audioStreamingManager.isPlaying()) {
+									audioStreamingManager.handlePauseRequest();
+								}
+							} else if (state == TelephonyManager.CALL_STATE_IDLE) {
+
+							} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+
+							}
+							super.onCallStateChanged(state, incomingNumber);
 						}
-					} else if (state == TelephonyManager.CALL_STATE_IDLE) {
-
-					} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-
+					};
+					TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+					if (mgr != null) {
+						mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 					}
-					super.onCallStateChanged(state, incomingNumber);
+				} catch (Exception e) {
+					Log.e("tmessages", e.toString());
 				}
-			};
-			TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-			if (mgr != null) {
-				mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 			}
-		} catch (Exception e) {
-			Log.e("tmessages", e.toString());
-		}
+		});
 		super.onCreate();
 	}
 
