@@ -167,8 +167,9 @@ public class AudioStreamingManager extends StreamingManager {
 				currentSessionCallback.playPrevious(prvIndex, metaData);
 			}
 		} else {
-			index = mediaList.size();
-			onSkipToPrevious();
+			if (instance.currentSessionCallback != null) {
+				currentSessionCallback.playPrevious(prvIndex, null);
+			}
 		}
 	}
 
