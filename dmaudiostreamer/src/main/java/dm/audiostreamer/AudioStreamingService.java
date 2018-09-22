@@ -72,8 +72,10 @@ public class AudioStreamingService extends Service
 				audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 				NotificationManager.getInstance()
 					.addObserver(this, NotificationManager.audioProgressDidChanged);
-				NotificationManager.getInstance().addObserver(this, NotificationManager.setAnyPendingIntent);
-				NotificationManager.getInstance().addObserver(this, NotificationManager.audioPlayStateChanged);
+				NotificationManager.getInstance()
+					.addObserver(this, NotificationManager.setAnyPendingIntent);
+				NotificationManager.getInstance()
+					.addObserver(this, NotificationManager.audioPlayStateChanged);
 				try {
 					phoneStateListener = new PhoneStateListener() {
 						@Override
@@ -361,7 +363,12 @@ public class AudioStreamingService extends Service
 				connection.setDoInput(true);
 				connection.connect();
 				InputStream input = connection.getInputStream();
-				Bitmap myBitmap = BitmapFactory.decodeStream(input);
+				Bitmap myBitmap = null;
+				try {
+					 myBitmap = BitmapFactory.decodeStream(input);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				return myBitmap;
 			} catch (IOException e) {
 				return null;
