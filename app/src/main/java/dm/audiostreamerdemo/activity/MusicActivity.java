@@ -265,13 +265,14 @@ public class MusicActivity extends AppCompatActivity
 	}
 
 	private void showMediaInfo(MediaMetaData media) {
+		if(media!=null){
 		currentSong = media;
 		audioPg.setValue(0);
 		audioPg.setMin(0);
 		audioPg.setMax(Integer.valueOf(media.getMediaDuration()) * 1000);
 		setPGTime(0);
 		setMaxTime();
-		loadSongDetails(media);
+		loadSongDetails(media);}
 	}
 
 	private void configAudioStreamer() {
