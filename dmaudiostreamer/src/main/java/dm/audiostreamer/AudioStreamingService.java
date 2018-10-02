@@ -65,9 +65,6 @@ public class AudioStreamingService extends Service
 
 	@Override
 	public void onCreate() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
 				audioStreamingManager = AudioStreamingManager.getInstance(AudioStreamingService.this);
 				audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 				NotificationManager.getInstance()
@@ -99,8 +96,6 @@ public class AudioStreamingService extends Service
 				} catch (Exception e) {
 					Log.e("tmessages", e.toString());
 				}
-			}
-		});
 		super.onCreate();
 	}
 
